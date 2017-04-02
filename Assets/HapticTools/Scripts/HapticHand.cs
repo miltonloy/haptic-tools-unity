@@ -81,8 +81,9 @@ namespace Leap.Unity
             Update is only called when something in the scene changed.
         */
         [ExecuteInEditMode]
-        protected void Update()
+        protected override void Update()
         {
+            base.Update();
             UpdateActuators();
         }
 

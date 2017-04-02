@@ -48,7 +48,8 @@ namespace Leap.Unity {
     }
 
 #if UNITY_EDITOR
-    void Update() {
+    // Modifique los accesors para poder overridearlo en HapticHand
+    protected virtual void Update() {
       if (!EditorApplication.isPlaying && SupportsEditorPersistence()) {
         Transform editorPoseSpace;
         LeapServiceProvider leapServiceProvider = FindObjectOfType<LeapServiceProvider>();
