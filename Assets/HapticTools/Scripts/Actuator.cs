@@ -8,12 +8,20 @@ public class Actuator : MonoBehaviour
     // Usado por el HapticEditor para mantener el valor del color
     public Color Color = Color.white;
     //[SerializeField]
-    // [Range(-1.5f, 1.5f)]
     [Range(0.0f, 1.0f)]
     public float Value;
     public HapticDeviceController device;
 
     float _oldValue;
+
+    void Start ()
+    {
+        GameObject sceneController = GameObject.Find("/HapticDeviceController");
+        if (sceneController)
+        {
+            device = sceneController.GetComponent<HapticDeviceController>();
+        }
+    }
 
     void Update ()
     {
@@ -21,14 +29,6 @@ public class Actuator : MonoBehaviour
         {
             OnChange();
             Color = Color.Lerp(Color.white, Color.red, Value / 1.0f);
-            // if (Mathf.Sign(Value) == 1)
-            // {
-            //     Color = Color.Lerp(Color.white, Color.red, Value / 1.5f);
-            // }
-            // else
-            // {
-            //     Color = Color.Lerp(Color.white, Color.blue, Mathf.Abs(Value) / 1.5f);
-            // }
         }
         _oldValue = Value;
     }

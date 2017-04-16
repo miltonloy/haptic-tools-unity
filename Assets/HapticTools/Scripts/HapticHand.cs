@@ -11,6 +11,8 @@ namespace Leap.Unity
     public class HapticHand : IHandModel
     {
 
+        public Color DisabledColor;
+
         private const int THUMB_BASE_INDEX = (int)Finger.FingerType.TYPE_THUMB * 4;
         private const int PINKY_BASE_INDEX = (int)Finger.FingerType.TYPE_PINKY * 4;
 
@@ -118,7 +120,7 @@ namespace Leap.Unity
                         Transform cylinder = _cylinderTransforms[key];
                         Actuator actuator = bone.gameObject.GetComponent<Actuator>();
                         // Si no hay actuador, lo pinta de blanco
-                        Color color = _cNothing;
+                        Color color = DisabledColor;
                         if (actuator != null)
                         {
                             // El rojo esa la presencia del actuador, el verde y el azul son para expresar el rango de valores del actuador
@@ -447,7 +449,7 @@ namespace Leap.Unity
             // -- BEGIN MILTON --
             // Crear un material unico para cada cylinder así después lo puedo cambiar a gusto
             Material uniqueMaterial = new Material(_material);
-            uniqueMaterial.color = _cNothing;
+            uniqueMaterial.color = DisabledColor;
             cylinder.AddComponent<MeshRenderer>().sharedMaterial = uniqueMaterial;
             // -- END MILTON --
             cylinder.transform.parent = transform;
