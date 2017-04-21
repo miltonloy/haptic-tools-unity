@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class Retractable : MonoBehaviour {
+public class TactileUI : MonoBehaviour {
 
     public float speed = 2.0f;
 
