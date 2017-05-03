@@ -12,35 +12,12 @@ public class HandheldObject : MonoBehaviour {
     }
 
     [SerializeField]
-    private PinchDetector _pinchDetectorA;
-    public PinchDetector PinchDetectorA {
-      get {
-        return _pinchDetectorA;
-      }
-      set {
-        _pinchDetectorA = value;
-      }
-    }
-
-    [SerializeField]
-    private PinchDetector _pinchDetectorB;
-    public PinchDetector PinchDetectorB {
-      get {
-        return _pinchDetectorB;
-      }
-      set {
-        _pinchDetectorB = value;
-      }
-    }
-
-    [SerializeField]
     private RotationMethod _oneHandedRotationMethod;
 
     private Transform _anchor;
     private Rigidbody _rigidbody;
-    private bool _isActive = false;
-
-    private float _defaultNearClip;
+    private bool _stateChanged = false;
+    private PinchDetector _pinch;
 
     void Start() {
       // Acá va el anchor este que no se para que lo usa
@@ -53,32 +30,36 @@ public class HandheldObject : MonoBehaviour {
     }
 
     void Update() {
-
-      bool didUpdate = false;
-      if(_pinchDetectorA != null)
-        didUpdate |= _pinchDetectorA.DidChangeFromLastFrame;
-      if(_pinchDetectorB != null)
-        didUpdate |= _pinchDetectorB.DidChangeFromLastFrame;
-
-      if (didUpdate) {
+      if (_stateChanged)
+      {
         transform.SetParent(null, true);
       }
 
-      if (_pinchDetectorA != null && _pinchDetectorA.IsActive) {
-        _isActive = true;
-        transformSingleAnchor(_pinchDetectorA);
-      } else if (_pinchDetectorB != null && _pinchDetectorB.IsActive) {
-        _isActive = true;
-        transformSingleAnchor(_pinchDetectorB);
+      if (_pinch != null)
+      {
+        _rigidbody.isKinematic = true;
+        transformSingleAnchor(_pinch);
       } else {
-        _isActive = false;
+        _rigidbody.isKinematic = false;
       }
 
-      _rigidbody.isKinematic = _isActive;
-
-      if (didUpdate) {
+      if (_stateChanged)
+      {
         transform.SetParent(_anchor, true);
+        _stateChanged = false;
       }
+    }
+
+    public void PinchEnabled(PinchDetector pinch)
+    {
+      _pinch = pinch;
+      _stateChanged = true;
+    }
+
+    public void PinchDisabled()
+    {
+      _pinch = null;
+      _stateChanged = true;
     }
 
     private void transformSingleAnchor(PinchDetector singlePinch) {
