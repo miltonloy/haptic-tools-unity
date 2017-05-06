@@ -5,15 +5,6 @@ using Leap.Unity;
 
 public class HandheldObject : MonoBehaviour {
 
-   public enum RotationMethod {
-      None,
-      Single,
-      Full
-    }
-
-    [SerializeField]
-    private RotationMethod _oneHandedRotationMethod;
-
     private Transform _anchor;
     private Rigidbody _rigidbody;
     private bool _stateChanged = false;
@@ -37,10 +28,12 @@ public class HandheldObject : MonoBehaviour {
 
       if (_pinch != null)
       {
-        _rigidbody.isKinematic = true;
+        // _rigidbody.isKinematic = true;
+        _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         transformSingleAnchor(_pinch);
       } else {
-        _rigidbody.isKinematic = false;
+        // _rigidbody.isKinematic = false;
+        _rigidbody.constraints = RigidbodyConstraints.None;
       }
 
       if (_stateChanged)
@@ -64,20 +57,7 @@ public class HandheldObject : MonoBehaviour {
 
     private void transformSingleAnchor(PinchDetector singlePinch) {
       _anchor.position = singlePinch.Position;
-
-      switch (_oneHandedRotationMethod) {
-        case RotationMethod.None:
-          break;
-        case RotationMethod.Single:
-          Vector3 p = singlePinch.Rotation * Vector3.right;
-          p.y = _anchor.position.y;
-          _anchor.LookAt(p);
-          break;
-        case RotationMethod.Full:
-          _anchor.rotation = singlePinch.Rotation;
-          break;
-      }
-
+      _anchor.rotation = singlePinch.Rotation;
       _anchor.localScale = Vector3.one;
     }
 }
