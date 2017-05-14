@@ -29,6 +29,15 @@ public class HapticMaterialDetector : MonoBehaviour {
         }
     }
 
+    public void EffectActivation (string hapticEffectName)
+    {
+        HapticEffectAction hapticEffect = GetComponent(hapticEffectName) as HapticEffectAction;
+        if (hapticEffect)
+        {
+            hapticEffect.StartEffect();
+        }
+    }
+
     /**
      * BoneCollisionDetector es el encargado de detectar las colisiones en cada hueso y lanzar la animación que corresponda
      */
@@ -48,7 +57,7 @@ public class HapticMaterialDetector : MonoBehaviour {
         void OnCollisionEnter(Collision collision)
         {
             if (!_owner) return;
-
+            CheckEffectTouch(collision);
             CheckSingleTouch(collision);
             _currentMaterialDepth = collision.gameObject.GetComponent<HapticMaterialDepth>();
             CheckDepthTouch(collision);
@@ -63,6 +72,18 @@ public class HapticMaterialDetector : MonoBehaviour {
         {
             _actuator.Value = 0;
             _currentMaterialDepth = null;
+        }
+
+        void CheckEffectTouch(Collision collision)
+        {
+            HapticEffectTrigger hapticEffect = collision.gameObject.GetComponent<HapticEffectTrigger>();
+            if (hapticEffect)
+            {
+                if (hapticEffect.ScriptName.Length > 0)
+                {
+                    _owner.EffectActivation(hapticEffect.ScriptName);
+                }
+            }
         }
 
         void CheckSingleTouch(Collision collision)

@@ -71,12 +71,6 @@ namespace Leap.Unity
 
         // El modelo fisico para observar los colisionadores
         public HandModel PhysicsHand;
-        // Esto es temporal, para reproducir un sonido cuando colisiona con un actuador
-
-        void Awake()
-        {
-            // sound = GetComponent<AudioSource>();
-        }
 
         /*
             https://docs.unity3d.com/ScriptReference/ExecuteInEditMode.html
