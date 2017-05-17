@@ -6,7 +6,7 @@ public class Actuator : MonoBehaviour
 {
     public int pin;
     // Usado por el HapticEditor para mantener el valor del color
-    public Color Color = Color.white;
+    // public Color Color = Color.white;
     //[SerializeField]
     [Range(0.0f, 1.0f)]
     public float Value;
@@ -28,7 +28,7 @@ public class Actuator : MonoBehaviour
         if (_oldValue != Value)
         {
             OnChange();
-            Color = Color.Lerp(Color.white, Color.red, Value / 1.0f);
+            // Color = Color.Lerp(Color.white, Color.red, Value / 1.0f);
         }
         _oldValue = Value;
     }
