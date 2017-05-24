@@ -7,21 +7,15 @@ public class FireHandEffect : HapticEffectAction
 	public GameObject FirePrefab;
 	Animator _animator;
 	Transform _palm;
-	// Coroutine _fireUpdate;
 	bool _isOnFire = false;
 	GameObject _fire;
 
 	void Start ()
 	{
 		_animator = GetComponent<Animator>();
+		_animator.enabled = false;
 		_palm = transform.Find("palm");
 	}
-
-	// void OnEnable()
-	// {
-	// 	// BORRAR
-	// 	Invoke("DaleVieja", 2f);
-	// }
 
 	// Este método lo llaman los otros scripts para interrumpir
     void ControlRequest ()
@@ -32,17 +26,13 @@ public class FireHandEffect : HapticEffectAction
 		}
     }
 
-	// void DaleVieja ()
-	// {
-	// 	StartEffect(new GameObject());
-	// }
-
 	public override void StartEffect (GameObject activator)
 	{
 		if (_isOnFire) return;
 		_isOnFire = true;
 		Destroy(activator);
 		// Iniciar efecto háptico
+		_animator.enabled = true;
 		_animator.SetBool("OnFire", true);
 		StartCoroutine(UpdateFire());
 		Invoke("StopEffect", 4f);
@@ -50,13 +40,13 @@ public class FireHandEffect : HapticEffectAction
 		_fire = Instantiate(FirePrefab, transform);
 	}
 
-	
-
 	void StopEffect ()
 	{
 		_isOnFire = false;
 		// Terminar efecto háptico
 		_animator.SetBool("OnFire", false);
+		_animator.enabled = false;
+		ResetActuators();
 		// Quitar fuego
 		Destroy(_fire);
 	}
@@ -76,5 +66,13 @@ public class FireHandEffect : HapticEffectAction
 	void OnDisable()
 	{
 		ControlRequest();
+	}
+
+	void ResetActuators()
+	{
+		foreach (Actuator actuator in GetComponentsInChildren<Actuator>())
+		{
+			actuator.Value = 0;
+		}
 	}
 }
