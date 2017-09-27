@@ -5,7 +5,6 @@ using System.Collections;
 public class Actuator : MonoBehaviour
 {
     public int pin;
-    //[SerializeField]
     [Range(0.0f, 1.0f)]
     public float Value;
     public HapticDeviceController device;
@@ -39,8 +38,7 @@ public class Actuator : MonoBehaviour
     {
         if (device != null && pin != 0)
         {
-            int conversion = (int)(Mathf.Clamp(Value, 0f, 1f) * 255f);
-            device.UpdatePin(pin, conversion);
+            device.UpdatePin(pin, Value);
         }
     }
 }

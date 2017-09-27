@@ -5,20 +5,21 @@ public class HapticDeviceController : MonoBehaviour {
 
     public string portName = "COM5"; // En Mac es /dev/cu.usbmodem1441
     public int baudRate = 57600;
-    //[Range(0, 255)]
-    //public int value;
+    [Range(0, 255)]
+    public int minValue = 0;
+    [Range(0, 255)]
+    public int maxValue = 255;
 
     bool _connected = false;
 
     ArduinoUno _firmata;
 
-    public void UpdatePin(int pin, int value)
+    public void UpdatePin(int pin, float normalizedForce)
     {
         if (!_connected) return;
-        value = (int)Mathf.Clamp(value, 0, 255);
+        int intValue = (int)Mathf.Lerp(minValue, maxValue, normalizedForce);
         _firmata.pinMode(pin, 3);
-        _firmata.analogWrite(pin, value);
-        //Debug.Log("analogWrite pin " + pin + " value " + value);
+        _firmata.analogWrite(pin, intValue);
     }
 
     void Start () {
